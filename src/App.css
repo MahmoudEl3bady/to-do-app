@@ -1,0 +1,49 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-color: #03001c;
+  --secondary-color: #ededed;
+  --third-color: #7f8487;
+}
+body {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  /* position: relative; */
+}
+.nav-btn {
+  background-color: var(--third-color);
+}
+.brand-img {
+  width: 25px;
+  margin-right: 4px;
+}
+.navbar {
+  background-color: #0f172b;
+}
+.add-task-input {
+  width: 600px;
+  height: 4em;
+}
+
+.tasks-header {
+  border-bottom: 1px solid var(--secondary-color);
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.task {
+  width: 600px;
+  background-color: var(--secondary-color);
+}
+.task-body {
+  overflow-wrap: break-word;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0vh;
+}
