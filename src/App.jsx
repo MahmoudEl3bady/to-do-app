@@ -11,7 +11,7 @@ function App() {
   const [tasks, setTasks] = useState([
     {
       id: 1,
-      body: "Go to Gym",
+      body: "Chapter 5 : Grokking Algorithms  ",
     },
     {
       id: 2,
@@ -19,11 +19,11 @@ function App() {
     },
     {
       id: 3,
-      body: "Tasks and add tasks comp: React to-do app",
+      body: "Theme Switcher : to-do app",
     },
     {
       id: 4,
-      body: "Learning Python",
+      body: "Lorem ipsum dolor sit, amet consectetur.",
     },
   ]);
 
@@ -50,7 +50,7 @@ function App() {
     );
   };
 
-  // Make the finished Task at the bottom of the TaskList 
+  // Make the finished Task at the bottom of the TaskList
 
   const handleDone = (task) => {
     const filtered = tasks.filter((t) => t.id !== task.id);
@@ -61,12 +61,14 @@ function App() {
     <>
       <Header />
       <AddTask onAdd={handleAdd} />
-      <Tasks
-        tasks={tasks}
-        onDelete={handleDelete}
-        onModify={handleModify}
-        onDone={handleDone}
-      />
+      {
+        <Tasks
+          tasks={tasks}
+          onDelete={handleDelete}
+          onModify={handleModify}
+          onDone={handleDone}
+        />
+      }
       {/* <Footer />  */}
     </>
   );

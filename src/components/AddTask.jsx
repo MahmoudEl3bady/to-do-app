@@ -14,7 +14,7 @@ const AddTask = ({ onAdd }) => {
         autoFocus
       />
       <button
-        className="btn btn-light btn-lg"
+        className="btn btn-light btn-lg text-dark"
         style={{ width: 250, color: "#7f8487" }}
         onClick={() => {
           if (!taskBody) return;
