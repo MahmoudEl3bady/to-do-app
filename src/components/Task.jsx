@@ -1,10 +1,13 @@
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FaCheckSquare, FaEdit } from "react-icons/fa";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ThemeContext } from "../ThemeContext";
 const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState(task.body);
   const [isDone, setIsDone] = useState(false);
+  const { theme } = useContext(ThemeContext);
+
   const handleSave = () => {
     onModify({ ...task, body: editedTask });
     setIsEditing(false);
@@ -19,15 +22,11 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
       <section
         className={
           !isDone
-            ? "task text-dark fw-bold d-flex justify-content-between align-items-center"
-            : "task  text-dark fw-bold d-flex justify-content-between align-items-center text-decoration-line-through"
+            ? `task  ${theme == "dark" ? "task--dark" : "task--light"}`
+            : "task text-decoration-line-through"
         }
         style={{
-          padding: "9px",
-          borderRadius: "8px",
-          boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
-          transition: "box-shadow borderLeft 0.3s ease",
-          backgroundColor: isDone ? "#7D7C7C" : "#fff",
+          backgroundColor: isDone && "#7D7C7C",
           borderLeft: isActive ? "8px solid red" : "",
         }}
       >
