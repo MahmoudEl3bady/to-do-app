@@ -8,11 +8,11 @@
   --primary-color: #03001c;
   --secondary-color: #ededed;
   --third-color: #7f8487;
+  --fine-black: #121213;
 }
 body {
   background: var(--primary-color);
   color: var(--secondary-color);
-  /* position: relative; */
 }
 .nav-btn {
   background-color: var(--third-color);
@@ -38,6 +38,22 @@ body {
 .task {
   width: 600px;
   background-color: var(--secondary-color);
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px;
+  border-radius: 8px;
+  box-shadow: "0px 2px 5px rgba(0, 0, 0, 0.1)";
+  transition: "box-shadow borderLeft 0.3s ease";
+}
+.task--dark {
+  color: #03001c;
+  background-color: #ededed;
+}
+.task--light {
+  color: #ededed;
+  background-color: var(--fine-black);
 }
 .task-body {
   overflow-wrap: break-word;
@@ -51,5 +67,13 @@ body {
 .task:hover {
   border-left: 8px solid #84848b;
   transition: "border-left 0.3s ease";
-  background-color: aqua;
 }
+
+.app--dark {
+  background-color: var(--primary-color);
+}
+.app-light {
+  background-color: var(--secondary-color);
+}
+
+/* ===================== light Theme Style ========================== */

@@ -1,13 +1,12 @@
 import Header from "./components/Header";
-import { useState } from "react";
+import { useId, useState } from "react";
 import AddTask from "./components/AddTask";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Tasks from "./components/Tasks";
-import Footer from "./components/Footer";
-
+import { ThemeContext } from "./ThemeContext";
 function App() {
-  const [id, setId] = useState(10);
+  const id = useId();
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -26,12 +25,12 @@ function App() {
       body: "Lorem ipsum dolor sit, amet consectetur.",
     },
   ]);
+  const [theme, setTheme] = useState("dark");
 
   // Adding a New Task
 
   const handleAdd = (task) => {
-    setTasks([...tasks, { id: id, body: task }]);
-    setId(id + 1);
+    setTasks([...tasks, { id: id + task.substr(0, 5), body: task }]);
   };
 
   // Delete Task Logic
@@ -58,19 +57,18 @@ function App() {
   };
 
   return (
-    <>
-      <Header />
-      <AddTask onAdd={handleAdd} />
-      {
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <main className={theme == "dark" ? "app--dark" : "app-light"}>
+        <Header />
+        <AddTask onAdd={handleAdd} />
         <Tasks
           tasks={tasks}
           onDelete={handleDelete}
           onModify={handleModify}
           onDone={handleDone}
         />
-      }
-      {/* <Footer />  */}
-    </>
+      </main>
+    </ThemeContext.Provider>
   );
 }
 
