@@ -41,7 +41,7 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
             {task.body}{" "}
           </span>
         </div>
-        <div className="">
+        <div className="editAndDelBtn">
           <button
             className="btn"
             onClick={() => {

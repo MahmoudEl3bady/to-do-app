@@ -25,7 +25,7 @@ body {
   background-color: #0f172b;
 }
 .add-task-input {
-  width: 600px;
+  width: 620px;
   height: 4em;
 }
 
@@ -36,6 +36,7 @@ body {
   margin-right: auto;
 }
 .task {
+  position: relative;
   width: 600px;
   background-color: var(--secondary-color);
   font-weight: bold;
@@ -68,6 +69,11 @@ body {
   border-left: 8px solid #84848b;
   transition: "border-left 0.3s ease";
 }
+.editAndDelBtn {
+  /* display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(25px, 1fr)); */
+  display: flex;
+}
 
 .app--dark {
   background-color: var(--primary-color);
@@ -75,5 +81,26 @@ body {
 .app-light {
   background-color: var(--secondary-color);
 }
+/* =======================Responsiveness=========================== */
 
-/* ===================== light Theme Style ========================== */
+@media (max-width: 710px) {
+  .add-task-input {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .tasks-header {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .task {
+    width: 90%;
+    max-width: 400px;
+    font-size: 15px;
+  }
+  .editAndDelBtn {
+    /* display: grid; */
+    flex-direction: column;
+  }
+}
