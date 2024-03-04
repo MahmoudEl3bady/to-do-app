@@ -13,7 +13,7 @@ const Tasks = ({ tasks, onDelete, onModify, onDone }) => {
         } tasks-header d-flex justify-content-between align-items-center `}
       >
         <h2>Tasks</h2>
-        <button className="btn">
+        <button className="btn" type="button">
           <CgDetailsMore
             className={theme === "dark" ? "text-light" : "text-dark"}
             style={{ fontSize: 28 }}

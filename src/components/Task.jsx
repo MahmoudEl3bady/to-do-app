@@ -63,7 +63,7 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
             name="modify Task"
             style={{ width: 400 }}
             autoFocus
-            className=" form-control"
+            className=" form-control task-edit-input"
           />
           <button className="btn  btn-light" onClick={handleSave}>
             Save

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { IoIosSettings } from "react-icons/io";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { IoIosSettings } from "react-icons/io";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MdOutlineLightMode } from "react-icons/md";
 import { CiDark } from "react-icons/ci";
 import { ThemeContext } from "../ThemeContext";
@@ -23,7 +23,7 @@ const Header = () => {
         >
           <img
             src="https://pomofocus.io/images/icon-white2.png"
-            alt=""
+            alt="To do app Icon "
             className="img-fluid brand-img"
           />
           To-do App

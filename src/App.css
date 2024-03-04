@@ -3,7 +3,10 @@
   margin: 0;
   padding: 0;
 }
-
+button:focus {
+  outline: 1px solid var(--third-color) !important;  /* To Improve the Accessibility   */ 
+  /* box-shadow: 0 0 5px #000; */
+}
 :root {
   --primary-color: #03001c;
   --secondary-color: #ededed;
@@ -102,5 +105,9 @@ body {
   .editAndDelBtn {
     /* display: grid; */
     flex-direction: column;
+  }
+  .task-edit-input {
+    width:90%;
+    max-width:300px;
   }
 }
