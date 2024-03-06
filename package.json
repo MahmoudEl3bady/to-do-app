@@ -2,10 +2,12 @@
   "name": "to-do-app",
   "private": true,
   "version": "0.0.0",
+  "proxy": "http://127.0.0.1:5000",
   "homepage": "https://mahmoudel3bady.github.io/to-do-app/",
   "type": "module",
   "scripts": {
     "predeploy": "npm run build",
+    "api": "cd api && venv/bin/flask run --no-debugger",
     "deploy": "gh-pages -b master -d build",
     "dev": "vite",
     "build": "vite build",

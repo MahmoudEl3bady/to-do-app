@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import AddTask from "./components/AddTask";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -7,25 +7,27 @@ import Tasks from "./components/Tasks";
 import { ThemeContext } from "./ThemeContext";
 function App() {
   const id = useId();
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      body: "Chapter 5 : Grokking Algorithms  ",
-    },
-    {
-      id: 2,
-      body: "Problem solving basic test: HackerRank",
-    },
-    {
-      id: 3,
-      body: "Theme Switcher : to-do app",
-    },
-    {
-      id: 4,
-      body: "Lorem ipsum dolor sit, amet consectetur.",
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
   const [theme, setTheme] = useState("dark");
+
+  //  Test Flask API
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/tasks");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+          setTasks(data);
+      } catch (error) {
+        console.error("Error fetching username:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Adding a New Task
 
