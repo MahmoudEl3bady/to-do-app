@@ -1,12 +1,15 @@
 import React, { useContext } from "react";
-// import { IoIosSettings } from "react-icons/io";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MdOutlineLightMode } from "react-icons/md";
 import { CiDark } from "react-icons/ci";
 import { ThemeContext } from "../ThemeContext";
-const Header = () => {
-  const { theme, setTheme } = useContext(ThemeContext);
+import { Link } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 
+
+const Header = () => {
+const {userData} = useAuth();
+
+  const { theme, setTheme } = useContext(ThemeContext);
   const toggleTheme = () => {
     if (theme === "dark") {
       setTheme("light");
@@ -28,6 +31,7 @@ const Header = () => {
           />
           To-do App
         </a>
+        <h1>{userData && `welcome , ${userData.username}`}</h1>
         <div className="">
           <button className="btn" onClick={toggleTheme}>
             {theme == "dark" ? (
@@ -36,6 +40,15 @@ const Header = () => {
               <CiDark size={23} color="white" />
             )}
           </button>
+          {userData ? (
+            <Link to="/logout" className="btn btn-primary">
+              Log out
+            </Link>
+          ) : (
+            <Link to="/register" className="btn btn-primary">
+              Sign up
+            </Link>
+          )}
         </div>
       </div>
     </nav>
