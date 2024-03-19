@@ -13,24 +13,6 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [theme, setTheme] = useState("dark");
 
-  // =============Fetch the current user===============
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const response = await fetch("http://127.0.0.1:5000/current_user");
-  //       if (!response.ok) {
-  //         throw new Error("User undefined !");
-  //       }
-  //       const data = await response.json();
-  //        setUser(data);
-  //     } catch (e) {
-  //       console.error("User Undefined:", error);
-  //     }
-  //   };
-  //   fetchUser();
-  // },[]);
-
   // =============Fetch Tasks from the server======================
 
   useEffect(() => {
@@ -57,32 +39,27 @@ function App() {
   //   setTasks([...tasks, { id: id + task.substr(0, 5), body: task }]);
   // };
 
-  const handleAdd = async (task) => {
-    try {
-      const response = await fetch("http://127.0.0.1:5000/add_task", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ body: task }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to add task");
-      }
-
-      const newTask = await response.json();
-
-      // Update the tasks state with the added task
-      setTasks([...tasks, newTask]);
-    } catch (error) {
-      console.error("Error adding task:", error);
-    }
+  const handleAddingTask =  (newTask) => {
+  if (newTask && newTask.body) {
+    setTasks([...tasks, newTask]);
+  }
   };
 
   // Delete Task Logic
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
+    const response = await fetch(`http://127.0.0.1:5000/tasks/${id}`,{
+      method:"DELETE",
+    });
+    try{
+        const data =await response.json();
+          if(data.success){
+            console.log('Task Deleted successfully ');
+          }
+          
+      }catch(error){
+          console.log("Error while Deleting: ",error);
+      }
   };
 
   // Edit Task
@@ -114,7 +91,7 @@ function App() {
               <ThemeContext.Provider value={{ theme, setTheme }}>
                 <main className={theme == "dark" ? "app--dark" : "app--light"}>
                   <Header />
-                  <AddTask onAdd={handleAdd} />
+                  <AddTask onAdd={handleAddingTask} />
                   <Tasks
                     tasks={tasks}
                     onDelete={handleDelete}
