@@ -8,9 +8,27 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
   const [isDone, setIsDone] = useState(false);
   const { theme } = useContext(ThemeContext);
 
-  const handleSave = () => {
-    onModify({ ...task, body: editedTask });
-    setIsEditing(false);
+  const handleSave = async (id) => {
+    try{
+
+      const response = await fetch(`http://127.0.0.1:5000/tasks/${id}`,{
+        method:"PATCH",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({new_body:editedTask})
+      });
+      const data = await response.json()
+      if(data.success){
+        const modifiedTask = {...task,body:editedTask}
+        onModify(modifiedTask);
+        alert("Task Updated successfully ");
+        setIsEditing(false);
+      }
+    }catch(error){
+      console.error("Error While modifying task: ",error);
+    }
+    
   };
 
   const handleActiveTask = () => {
@@ -65,7 +83,7 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
             autoFocus
             className=" form-control task-edit-input"
           />
-          <button className="btn  btn-light" onClick={handleSave}>
+          <button className="btn  btn-light" onClick={()=>handleSave(task.id)}>
             Save
           </button>
         </div>

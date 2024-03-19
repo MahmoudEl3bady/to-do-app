@@ -160,6 +160,30 @@ def delete_task(id):
 
 
 
+@app.route('/tasks/<int:id>',methods=['PATCH'])
+def modify_task(id):
+    try:
+        data = request.get_json()
+        new_body = data.get("new_body")
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT id FROM tasks WHERE id = %s",(id,))
+        task_id = cur.fetchone()
+        cur.close()
+
+        if task_id:
+            cur  =mysql.connection.cursor()
+            cur.execute("UPDATE tasks SET body = %s WHERE id = %s",(new_body,task_id))
+            mysql.connection.commit()
+            cur.close()
+            return jsonify(success=True, message="Task Updated Successfully",task=new_body,id=task_id), 200
+        else:
+            return jsonify(success=False, message="Task not found"), 404            
+    except Exception as e:
+        cur.close()
+        return jsonify(success=False, message=f"An error occurred: {str(e)}"), 500
+
+
+
 
 
 
