@@ -1,41 +1,72 @@
 import Header from "./components/Header";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import AddTask from "./components/AddTask";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Tasks from "./components/Tasks";
 import { ThemeContext } from "./ThemeContext";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RegisterForm from "./components/RegisterFrom";
+import LoginForm from "./components/LoginForm";
+import { AuthProvider } from "./AuthContext";
 function App() {
-  const id = useId();
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      body: "Chapter 5 : Grokking Algorithms  ",
-    },
-    {
-      id: 2,
-      body: "Problem solving basic test: HackerRank",
-    },
-    {
-      id: 3,
-      body: "Theme Switcher : to-do app",
-    },
-    {
-      id: 4,
-      body: "Lorem ipsum dolor sit, amet consectetur.",
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
   const [theme, setTheme] = useState("dark");
 
-  // Adding a New Task
+  const token = sessionStorage.getItem("token");
+  // =============Fetch Tasks from the server======================
 
-  const handleAdd = (task) => {
-    setTasks([...tasks, { id: id + task.substr(0, 5), body: task }]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+         if (!token) {
+           throw new Error("Access token not found");
+         }
+
+         const response = await fetch("http://127.0.0.1:5000/tasks", {
+           method: "GET",
+           headers: {
+             Authorization: `Bearer ${token}`,
+           },
+         });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data);
+        setTasks(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+   
+
+  // Add task 
+  const handleAddingTask =  (newTask) => {
+  if (newTask && newTask.body) {
+    setTasks([...tasks, newTask]);
+  }
   };
 
   // Delete Task Logic
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
+    const response = await fetch(`http://127.0.0.1:5000/tasks/${id}`,{
+      method:"DELETE",
+    });
+    try{
+        const data =await response.json();
+          if(data.success){
+            console.log('Task Deleted successfully ');
+          }
+          
+      }catch(error){
+          console.log("Error while Deleting: ",error);
+      }
   };
 
   // Edit Task
@@ -57,18 +88,32 @@ function App() {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-      <main className={theme == "dark" ? "app--dark" : "app-light"}>
-        <Header />
-        <AddTask onAdd={handleAdd} />
-        <Tasks
-          tasks={tasks}
-          onDelete={handleDelete}
-          onModify={handleModify}
-          onDone={handleDone}
-        />
-      </main>
-    </ThemeContext.Provider>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route
+            path="/"
+            exact
+            element={
+              <ThemeContext.Provider value={{ theme, setTheme }}>
+                <main className={theme == "dark" ? "app--dark" : "app--light"}>
+                  <Header />
+                  <AddTask onAdd={handleAddingTask} />
+                  <Tasks
+                    tasks={tasks}
+                    onDelete={handleDelete}
+                    onModify={handleModify}
+                    onDone={handleDone}
+                  />
+                </main>
+              </ThemeContext.Provider>
+            }
+          />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/login" element={<LoginForm />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
