@@ -1,17 +1,19 @@
 import { useState } from "react";
 
 const AddTask = ({onAdd}) => {
+  const token = sessionStorage.getItem('token');
   const [taskBody, setTaskBody] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
 
-      const response = await fetch("http://127.0.0.1:5000/tasks",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
+      const response = await fetch("http://127.0.0.1:5000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body:JSON.stringify({addTask:taskBody})
+        body: JSON.stringify({ addTask: taskBody }),
       });
       if (!response.ok) {
         throw new Error("Failed to add task");

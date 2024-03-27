@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 
 const RegisterForm = () => {
-  const [username,setUsername] =useState('');
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { userData, setUserData } = useAuth();
@@ -16,7 +16,7 @@ const RegisterForm = () => {
     try {
       const response = await fetch("http://127.0.0.1:5000/register", {
         method: "POST",
-        body:formData,
+        body: formData,
       });
 
       const data = await response.json();
@@ -24,15 +24,14 @@ const RegisterForm = () => {
       if (data.registerSuccess) {
         alert(data.username);
         setUserData(data);
-        navigate("/");
+        navigate("/login");
       } else {
-        console.error("Registration failed: " , data.message);
+        console.error("Registration failed: ", data.message);
       }
     } catch (error) {
       console.error("An error occurred:", error);
     }
   };
-
 
   return (
     <div className="container">

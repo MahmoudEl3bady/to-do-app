@@ -1,10 +1,14 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Task from "./Task";
 import { CgDetailsMore } from "react-icons/cg";
 import { ThemeContext } from "../ThemeContext";
+
 const Tasks = ({ tasks, onDelete, onModify, onDone }) => {
   const [isActive, setIsActive] = useState(null);
   const { theme } = useContext(ThemeContext);
+
+ 
+
   return (
     <section className="d-flex flex-column gap-3 justify-content-center align-items-center  pb-5 tasks ">
       <div

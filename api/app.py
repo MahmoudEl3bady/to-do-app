@@ -1,8 +1,7 @@
 from flask import Flask, jsonify,request,session , redirect
 from flask_cors import CORS
 from flask_mysqldb import MySQL
-from flask_session import Session
-
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from datetime import timedelta
 
 # Set the session lifetime to 30 minutes (1800 seconds)
@@ -11,17 +10,16 @@ from datetime import timedelta
 app = Flask(__name__)
 CORS(app)
 
-SESSION_TYPE = 'filesystem'
 app.config.from_object(__name__)
-Session(app)
 
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
 
 # Set the secret key to enable session cookies
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.config['JWT_SECRET_KEY'] = b'_5#y2L"F4Q8z\n\xec]/' 
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1) 
+app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']  # Example: Look for tokens in headers and cookies
 
-
+jwt = JWTManager(app)
 
 # Database Configuration
 
@@ -47,11 +45,9 @@ def register():
             cur.close()
             # Retrieve user ID after insertion
             cur = mysql.connection.cursor()
-            cur.execute(f"SELECT id FROM users WHERE username ='{username}'")
+            cur.execute(f"SELECT id FROM users WHERE username ='%s'",(username,))
             user_id = cur.fetchone()[0]
-            print(user_id)
             cur.close()
-            # Set session data for the newly registered user
 
             return jsonify(registerSuccess=True, message=f"Registration successful, welcome {username}!", username=username, user_id=user_id)
         except Exception as e:
@@ -66,25 +62,29 @@ def login():
         password = request.form.get('password')
         try:
             cur = mysql.connection.cursor()
-            cur.execute(f"SELECT id, username, email, password FROM users WHERE email='{email}' AND password='{password}'")
+            cur.execute("SELECT id, username, email, password FROM users WHERE email=%s AND password=%s", (email, password))
             user_data = cur.fetchall()
+            cur.close()
           
             if user_data:
-                print(user_data[0][1])
-                session['user_id'] = user_data[0][0]
-                session['username']=user_data[0][1]
-                print(session.get("user_id"))
-                return jsonify(loginSuccess=True, message=f"Welcome, {session['username']}!",username = session['username'],user_id = session['user_id'])
+                access_token = create_access_token(identity=email)
+                print()
+                return jsonify(loginSuccess=True, message=f"Login Successfully",access_token=access_token)
             else:
                 return jsonify(loginSuccess=False, message="Login failed, please try again."), 401
         except Exception as e:
             return jsonify(loginSuccess=False, message=f"An error occurred: {str(e)}"), 500
 
+@app.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
 
-@app.route('/logout')
-def logout():
-    session.pop("username",None)
 
+# @app.route('/logout')
+# @jwt_required()
+# def logout():
 
 @app.route('/me',methods=['GET'])
 def current_user():
@@ -94,32 +94,59 @@ def current_user():
     except KeyError:
         return jsonify(error="User not logged in"), 401
 
-@app.route('/tasks',methods=['GET'])
+@app.route('/tasks', methods=['GET'])
+@jwt_required()
 def show_tasks():
-    cur = mysql.connection.cursor()
-    print(session.get('user_id'))
-    cur.execute(f"SELECT * FROM tasks")
-    fetch_data = cur.fetchall()
-    todos_list = []
-    for row in fetch_data:
-        todo = {    
-            'id': row[0],
-            'user_id': row[1],
-            'body': row[2],
-            'is_completed': row[3]
-        }
-        todos_list.append(todo)
-    
-    # Convert the list of dictionaries to JSON and return it as a response
-    return jsonify(todos_list)
+    try:
+        # Get the current user's email address from the JWT token
+        current_user_email = get_jwt_identity()
+        print(current_user_email)
+
+        # Retrieve user ID from the database based on the email address
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT id FROM users WHERE email = %s", (current_user_email,))
+        user_id = cur.fetchone()[0]
+        cur.close()
+
+        # Fetch tasks for the user using their user ID
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM tasks WHERE user_id = %s", (user_id,))
+        fetch_data = cur.fetchall()
+        cur.close()
+
+        # Construct a list of tasks
+        tasks_list = []
+        for row in fetch_data:
+            task = {    
+                'id': row[0],
+                'user_id': row[1],
+                'body': row[2],
+                'is_completed': row[3]
+            }
+            tasks_list.append(task)
+
+        # Return the list of tasks as JSON response
+        return jsonify(tasks_list), 200
+
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 @app.route('/tasks', methods=['POST'])
+@jwt_required()
 def add_task():
     data = request.get_json()
     body = data.get('addTask')
     try:
+        current_user_email = get_jwt_identity()
+        print(current_user_email)
+
+        # Retrieve user ID from the database based on the email address
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO tasks (user_id, body, is_completed) VALUES (%s, %s, %s)", (3, body, False))
+        cur.execute("SELECT id FROM users WHERE email = %s", (current_user_email,))
+        user_id = cur.fetchone()[0]
+        cur.close()
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO tasks (user_id, body, is_completed) VALUES (%s, %s, %s)", (user_id, body, False))
         mysql.connection.commit()
         task_id = cur.lastrowid  # Get the last inserted id
         cur.close()
@@ -185,19 +212,6 @@ def modify_task(id):
 
 
 
-
-
-
-# Session Test 
-    
-@app.route('/set/<val>')
-def set_session(val):
-    session['key'] = val
-    return f"The value set is {val}"
-
-@app.route('/get')
-def get_session():
-    return f"The Session vlaue is {session.get('key')}"
 
 
 

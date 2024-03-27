@@ -7,6 +7,8 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { userData, setUserData } = useAuth();
+  // The user token
+  const token = sessionStorage.getItem("token");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -22,6 +24,8 @@ const LoginForm = () => {
 
       if (data.loginSuccess) {
         setUserData(data);
+        console.log("the Data is : ", data);
+        sessionStorage.setItem("token", data.access_token);
         navigate("/"); // Redirect to the main app page if login is successful
       } else {
         console.error("Login failed:", data.message);
@@ -37,7 +41,6 @@ const LoginForm = () => {
       console.log("userData:", userData);
     }
   }, [userData]); // Include userData in the dependency array
-
   return (
     <div className="container mt-5 d-flex justify-content-center">
       <form
@@ -84,7 +87,7 @@ const LoginForm = () => {
         <p className="text-center mt-3">
           Don't have an account? <a href="/register">Sign up</a>
         </p>
-      <h1>{userData && userData.username}</h1>
+        <h1>{userData && userData.username}</h1>
       </form>
     </div>
   );

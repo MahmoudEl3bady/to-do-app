@@ -13,12 +13,22 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [theme, setTheme] = useState("dark");
 
+  const token = sessionStorage.getItem("token");
   // =============Fetch Tasks from the server======================
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/tasks");
+         if (!token) {
+           throw new Error("Access token not found");
+         }
+
+         const response = await fetch("http://127.0.0.1:5000/tasks", {
+           method: "GET",
+           headers: {
+             Authorization: `Bearer ${token}`,
+           },
+         });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -33,12 +43,9 @@ function App() {
     fetchData();
   }, []);
 
-  // Adding a New Task
+   
 
-  // const handleAdd = (task) => {
-  //   setTasks([...tasks, { id: id + task.substr(0, 5), body: task }]);
-  // };
-
+  // Add task 
   const handleAddingTask =  (newTask) => {
   if (newTask && newTask.body) {
     setTasks([...tasks, newTask]);

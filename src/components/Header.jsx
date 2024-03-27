@@ -5,9 +5,9 @@ import { ThemeContext } from "../ThemeContext";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 
-
+const token = sessionStorage.getItem("token");
 const Header = () => {
-const {userData} = useAuth();
+  const { userData } = useAuth();
 
   const { theme, setTheme } = useContext(ThemeContext);
   const toggleTheme = () => {
@@ -16,6 +16,11 @@ const {userData} = useAuth();
     } else {
       setTheme("dark");
     }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+  alert("Logged out successfully! ");
   };
   return (
     <nav className="NAV navbar navbar-expand-md  text-light d-flex justify-content-center align-items-center p-3 sticky-top shadow">
@@ -31,7 +36,7 @@ const {userData} = useAuth();
           />
           To-do App
         </a>
-        <h1>{userData && `welcome , ${userData.username}`}</h1>
+        {/* <h1>{token && `welcome , `}</h1> */}
         <div className="">
           <button className="btn" onClick={toggleTheme}>
             {theme == "dark" ? (
@@ -40,8 +45,8 @@ const {userData} = useAuth();
               <CiDark size={23} color="white" />
             )}
           </button>
-          {userData ? (
-            <Link to="/logout" className="btn btn-primary">
+          {token ? (
+            <Link to="/login" onClick={handleLogout} className="btn btn-primary">
               Log out
             </Link>
           ) : (
