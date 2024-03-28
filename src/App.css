@@ -51,6 +51,9 @@ body {
   box-shadow: "0px 2px 5px rgba(0, 0, 0, 0.1)";
   transition: "box-shadow borderLeft 0.3s ease";
 }
+  .task span {
+    word-break: break-all;
+  }
 .task--dark {
   color: #03001c;
   background-color: #ededed;
@@ -85,7 +88,9 @@ body {
   background-color: var(--secondary-color);
 }
 
-
+.header-light {
+  background-color:#252d42;
+}
 
 /* =======================Responsiveness=========================== */
 

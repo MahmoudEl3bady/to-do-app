@@ -49,7 +49,7 @@ const AddTask = ({onAdd}) => {
           autoFocus
         />
       <button
-        className="btn btn-light btn-lg text-dark"
+        className="btn btn-light btn-lg text-dark mt-2 "
         style={{ width: 250, color: "#7f8487" }}
         type="submit"
       >

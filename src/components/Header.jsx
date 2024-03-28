@@ -23,7 +23,7 @@ const Header = () => {
   alert("Logged out successfully! ");
   };
   return (
-    <nav className="NAV navbar navbar-expand-md  text-light d-flex justify-content-center align-items-center p-3 sticky-top shadow">
+    <nav className={`NAV navbar navbar-expand-md  text-light d-flex justify-content-center align-items-center p-3 sticky-top shadow  ${theme ==="light"&&"header-light"} `}>
       <div className="container">
         <a
           href="#"

@@ -48,9 +48,9 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
           borderLeft: isActive ? "8px solid red" : "",
         }}
       >
-        <div className="d-flex gap-5 doneTask h-100">
+        <div className="d-flex gap-2 align-items-center doneTask h-100">
           <button className="btn" onClick={() => setIsDone(!isDone)}>
-            <FaCheckSquare style={{ fontSize: 25 }} onClick={onDone} />
+            <FaCheckSquare style={{ fontSize: 25  }} onClick={onDone} />
           </button>
           <span
             onClick={handleActiveTask}

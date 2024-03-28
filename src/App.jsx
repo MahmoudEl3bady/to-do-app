@@ -19,16 +19,16 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-         if (!token) {
-           throw new Error("Access token not found");
-         }
+        if (!token) {
+          throw new Error("Access token not found");
+        }
 
-         const response = await fetch("http://127.0.0.1:5000/tasks", {
-           method: "GET",
-           headers: {
-             Authorization: `Bearer ${token}`,
-           },
-         });
+        const response = await fetch("http://127.0.0.1:5000/tasks", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -43,30 +43,27 @@ function App() {
     fetchData();
   }, []);
 
-   
-
-  // Add task 
-  const handleAddingTask =  (newTask) => {
-  if (newTask && newTask.body) {
-    setTasks([...tasks, newTask]);
-  }
+  // Add task
+  const handleAddingTask = (newTask) => {
+    if (newTask && newTask.body) {
+      setTasks([...tasks, newTask]);
+    }
   };
 
   // Delete Task Logic
   const handleDelete = async (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
-    const response = await fetch(`http://127.0.0.1:5000/tasks/${id}`,{
-      method:"DELETE",
+    const response = await fetch(`http://127.0.0.1:5000/tasks/${id}`, {
+      method: "DELETE",
     });
-    try{
-        const data =await response.json();
-          if(data.success){
-            console.log('Task Deleted successfully ');
-          }
-          
-      }catch(error){
-          console.log("Error while Deleting: ",error);
+    try {
+      const data = await response.json();
+      if (data.success) {
+        console.log("Task Deleted successfully ");
       }
+    } catch (error) {
+      console.log("Error while Deleting: ", error);
+    }
   };
 
   // Edit Task
@@ -87,6 +84,11 @@ function App() {
     setTasks([...filtered, task]);
   };
 
+
+    useEffect(() => {
+      document.body.className = theme === "dark" ? "app--dark" : "app--light";
+    }, [theme]);
+
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -96,7 +98,7 @@ function App() {
             exact
             element={
               <ThemeContext.Provider value={{ theme, setTheme }}>
-                <main className={theme == "dark" ? "app--dark" : "app--light"}>
+                <main >
                   <Header />
                   <AddTask onAdd={handleAddingTask} />
                   <Tasks
