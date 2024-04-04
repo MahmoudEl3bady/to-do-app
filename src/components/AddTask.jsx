@@ -5,6 +5,7 @@ const AddTask = ({onAdd}) => {
   const [taskBody, setTaskBody] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!token) alert("Please Log in first!")
     try{
 
       const response = await fetch("http://127.0.0.1:5000/tasks", {

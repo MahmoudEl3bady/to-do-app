@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
-
+import { useFormik} from "formik";
+import { loginSchema } from "../schemas";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,11 +24,13 @@ const LoginForm = () => {
       const data = await response.json();
 
       if (data.loginSuccess) {
-        setUserData(data);
+     
         console.log("the Data is : ", data);
+        alert(data.message);
         sessionStorage.setItem("token", data.access_token);
         navigate("/"); // Redirect to the main app page if login is successful
       } else {
+        alert(data.message);
         console.error("Login failed:", data.message);
       }
     } catch (error) {
@@ -35,14 +38,16 @@ const LoginForm = () => {
     }
   };
 
-  useEffect(() => {
-    if (userData) {
-      // setUserData([userData]); // Log userData when it changes
-      console.log("userData:", userData);
-    }
-  }, [userData]); // Include userData in the dependency array
+  const {values , errors,touched , isSubmitting,handleBlur,handleChange} = useFormik({
+    initialValues:{
+      email:"",
+      password:"",
+    },
+    validationSchema:loginSchema,
+  })
+  
   return (
-    <div className="container mt-5 d-flex justify-content-center">
+    <div className="container d-flex justify-content-center login-form">
       <form
         method="POST"
         className="form bg-light text-dark register-form p-4" // Added padding for spacing inside the form
@@ -55,13 +60,18 @@ const LoginForm = () => {
           <input
             type="email"
             name="email"
-            className="form-control"
             id="email"
             placeholder="example@gmail.com"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            className={`form-control  ${
+              errors.email && touched.email ? "input-error" : ""
+            }`}
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
+          {errors.email && touched.email && (
+            <p className="error">{errors.email}</p>
+          )}
         </div>
 
         <div className="form-group">
@@ -69,15 +79,21 @@ const LoginForm = () => {
           <input
             type="password"
             name="password"
-            className="form-control"
             id="password"
             placeholder="Enter strong password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            className={`form-control  ${
+              errors.password && touched.password ? "input-error" : ""
+            }`}
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
+          {errors.password && touched.password && (
+            <p className="error">{errors.password}</p>
+          )}
         </div>
         <button
+          disabled={isSubmitting || Object.keys(errors).length > 0}
           type="submit"
           name="submit"
           className="btn btn-primary btn-block"
@@ -87,7 +103,6 @@ const LoginForm = () => {
         <p className="text-center mt-3">
           Don't have an account? <a href="/register">Sign up</a>
         </p>
-        <h1>{userData && userData.username}</h1>
       </form>
     </div>
   );

@@ -1,13 +1,10 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthContext";
+import { useFormik } from "formik";
+import { registerSchema } from "../schemas";
 
 const RegisterForm = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { userData, setUserData } = useAuth();
 
+  // const { userData, setUserData } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -22,8 +19,7 @@ const RegisterForm = () => {
       const data = await response.json();
 
       if (data.registerSuccess) {
-        alert(data.username);
-        setUserData(data);
+        alert(data.message);
         navigate("/login");
       } else {
         console.error("Registration failed: ", data.message);
@@ -33,52 +29,82 @@ const RegisterForm = () => {
     }
   };
 
+  const { values, errors, touched, isSubmitting, handleBlur, handleChange } =
+    useFormik({
+      initialValues: {
+        username: "",
+        email: "",
+        password: "",
+      },
+      validationSchema: registerSchema,
+    });
+  console.log(errors);
+
   return (
-    <div className="container">
+    <div className={`container  form-con  text-dark bg-light `}>
       <div className="row">
         <div className="col-md-6 offset-md-3 mt-5">
           <h2 className="text-center">Sign Up</h2>
           <p className="text-center">
             Already have an account? <Link to="/login">Login</Link>
           </p>
-          <form onSubmit={handleSubmit} method="POST">
+          <form onSubmit={handleSubmit} method="POST" autoComplete="off">
             <div className="form-group">
               <label htmlFor="username">Username</label>
               <input
                 type="text"
-                className="form-control"
                 id="username"
                 name="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
+                className={`form-control  ${
+                  errors.username && touched.username ? "input-error" : ""
+                }`}
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
             </div>
+            {errors.username && touched.username && (
+              <p className="error">{errors.username}</p>
+            )}
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
                 type="email"
-                className="form-control"
                 id="email"
                 name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                className={`form-control  ${
+                  errors.email && touched.email ? "input-error" : ""
+                }`}
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
             </div>
+            {errors.email && touched.email && (
+              <p className="error">{errors.email}</p>
+            )}
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input
                 type="password"
-                className="form-control"
                 id="password"
                 name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+                className={`form-control  ${
+                  errors.password && touched.password ? "input-error" : ""
+                }`}
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
             </div>
-            <button type="submit" className="btn btn-primary btn-block">
+            {errors.password && touched.password && (
+              <p className="error">{errors.password}</p>
+            )}
+            <button
+              disabled={isSubmitting || Object.keys(errors).length > 0}
+              type="submit"
+              className="btn btn-primary btn-block"
+            >
               Sign up
             </button>
           </form>

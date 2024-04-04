@@ -39,15 +39,16 @@ def register():
         password = request.form.get('password')
         
         try:
-            cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)", (username, email, password))
-            mysql.connection.commit()
-            cur.close()
-            # Retrieve user ID after insertion
-            cur = mysql.connection.cursor()
-            cur.execute(f"SELECT id FROM users WHERE username ='%s'",(username,))
-            user_id = cur.fetchone()[0]
-            cur.close()
+            if username and email and password:
+                cur = mysql.connection.cursor()
+                cur.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)", (username, email, password))
+                mysql.connection.commit()
+                cur.close()
+                # Retrieve user ID after insertion
+                cur = mysql.connection.cursor()
+                cur.execute(f"SELECT id FROM users WHERE username =%s",(username,))
+                user_id = cur.fetchone()[0]
+                cur.close()
 
             return jsonify(registerSuccess=True, message=f"Registration successful, welcome {username}!", username=username, user_id=user_id)
         except Exception as e:
