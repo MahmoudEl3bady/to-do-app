@@ -22,6 +22,7 @@ const RegisterForm = () => {
         alert(data.message);
         navigate("/login");
       } else {
+        alert(data.message);
         console.error("Registration failed: ", data.message);
       }
     } catch (error) {

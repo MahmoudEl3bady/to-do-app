@@ -1,16 +1,16 @@
-
 # Full-Stack Todo App
 
-This is a full-stack todo application built using Flask (python) and MySQL DBMS for the backend and React.Js for the frontend
+This is a full-stack todo application built using Flask (python) and MySQL RDBMS for the backend and React.Js for the frontend
 
 ## Features
 
-- User registration and authentication using  JWT  (JSON Web Token ).
+- User registration and authentication using JWT (JSON Web Token ).
+- Forms validation using <a href="https://formik.org/" target="_blank" >Formik</a> and <a href="https://www.npmjs.com/package/yup" target="_blank" >Yup</a> for seamless data entry.
 - Adding, viewing, modifying, and deleting tasks.
 - Dark and light theme toggling.
 - Integration with backend API for task management.
 - Hide completed tasks to focus on what's important.
- - Responsive design : view the optimal layout depending on your device's screen size.
+- Responsive design : view the optimal layout depending on your device's screen size.
 
 ## Technologies Used
 
@@ -29,24 +29,29 @@ This is a full-stack todo application built using Flask (python) and MySQL DBMS 
 - **Flask-JWT-Extended**: Flask extension for JSON Web Token (JWT) authentication.
 
 ## Setup
-<h4>Make sure you have Nodejs, npm,python3 and mysql Installed. </h4> 
-1. **Clone the repository:**
+
+<h4>Make sure you have Nodejs, npm,python3 and mysql Installed. </h4>
+
+1.**Clone the repository:**
 
 ```bash
 git clone https://github.com/MahmoudEl3bady/to-do-app.git
 ```
 
-2. **Install React dependanices :**
+2.**Install React dependanices :**
 
 ```bash
-cd to-do-app && npm install 
+cd to-do-app && npm install
 ```
-3. **Install Flask Requirements :**
+
+3.**Install Flask Requirements :**
 
 ```bash
 pip install Flask Flask-CORS Flask-MySQLdb Flask-JWT-Extended
 ```
-4.  **Create a Database:** 
+
+4.**Create the Database:**
+
 ```sql
  CREATE DATABASE Todo;
  CREATE TABLE users (
@@ -65,16 +70,15 @@ CREATE TABLE tasks (
 );
 
 ```
-6. **Start the flask server :**
+
+6.**Start the flask server :**
 
 ```bash
-npm run api 
+npm run api
 ```
-7. **Start the react server :**
+
+7.**Start the react server :**
 
 ```bash
-npm run dev 
+npm run dev
 ```
-
-
-

@@ -191,7 +191,6 @@ body {
 
 @media (max-width: 710px) {
   .add-task-input {
-    width: 90%;
     max-width: 400px;
   }
 
