@@ -2,35 +2,14 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { FaCheckSquare, FaEdit } from "react-icons/fa";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../ThemeContext";
+import { useDispatch } from "react-redux";
+import { handleModifyTask } from "../rtk/features/tasksSlice";
 const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState(task.body);
   const [isDone, setIsDone] = useState(false);
   const { theme } = useContext(ThemeContext);
-
-  const handleSave = async (id) => {
-    try{
-
-      const response = await fetch(`http://127.0.0.1:5000/tasks/${id}`,{
-        method:"PATCH",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify({new_body:editedTask})
-      });
-      const data = await response.json()
-      if(data.success){
-        const modifiedTask = {...task,body:editedTask}
-        onModify(modifiedTask);
-        alert("Task Updated successfully ");
-        setIsEditing(false);
-      }
-    }catch(error){
-      console.error("Error While modifying task: ",error);
-    }
-    
-  };
-
+  const dispatch = useDispatch();
   const handleActiveTask = () => {
     setIsActive(task.id);
   };
@@ -50,7 +29,7 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
       >
         <div className="d-flex gap-2 align-items-center doneTask h-100">
           <button className="btn" onClick={() => setIsDone(!isDone)}>
-            <FaCheckSquare style={{ fontSize: 25  }} onClick={onDone} />
+            <FaCheckSquare style={{ fontSize: 25 }} onClick={onDone} />
           </button>
           <span
             onClick={handleActiveTask}
@@ -73,6 +52,7 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
           </button>
         </div>
       </section>
+      {console.log(typeof task.id)}
       {isEditing && (
         <div className="d-flex gap-3">
           <input
@@ -83,7 +63,12 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
             autoFocus
             className=" form-control task-edit-input"
           />
-          <button className="btn  btn-light" onClick={()=>handleSave(task.id)}>
+          <button
+            className="btn  btn-light"
+            onClick={() =>
+              dispatch(handleModifyTask({ id: task.id, editedTask }))
+            }
+          >
             Save
           </button>
         </div>
