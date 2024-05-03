@@ -1,41 +1,14 @@
 import { useState } from "react";
-
-const AddTask = ({onAdd}) => {
-  const token = sessionStorage.getItem('token');
+import { addTask, handleAddTask } from "../rtk/features/tasksSlice";
+import { useDispatch } from "react-redux";
+const AddTask = () => {
+  const token = sessionStorage.getItem("token");
+  const dispatch = useDispatch();
   const [taskBody, setTaskBody] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!token) alert("Please Log in first!")
-    try{
-
-      const response = await fetch("http://127.0.0.1:5000/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ addTask: taskBody }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to add task");
-      }
-      const data =await response.json();
-      if(data.success){
-         const newTask = {
-           id: data.id, // Use the actual ID from the backend
-           body: data.task,
-           isCompleted: false,
-         };
-        onAdd(newTask)
-        console.log(data);
-        setTaskBody('');
-        // alert(data.message);
-      }
-    }
-    catch (error){
-        console.error("Error Ading Task : " ,error);
-    }
-
+   dispatch(handleAddTask(taskBody));
+   setTaskBody('');
   };
   return (
     <section className="add-task-section  d-flex flex-column gap-3 justify-content-center align-items-center p-4  mx-auto ">
@@ -49,14 +22,14 @@ const AddTask = ({onAdd}) => {
           onChange={(e) => setTaskBody(e.target.value)}
           autoFocus
         />
-      <button
-        className="btn btn-light btn-lg text-dark mt-2 "
-        style={{ width: 250, color: "#7f8487" }}
-        type="submit"
-        disabled={!taskBody}
-      >
-        Add Task
-      </button>
+        <button
+          className="btn btn-light btn-lg text-dark mt-2 "
+          style={{ width: 250, color: "#7f8487" }}
+          type="submit"
+          disabled={!taskBody}
+        >
+          Add Task
+        </button>
       </form>
     </section>
   );
