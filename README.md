@@ -9,6 +9,7 @@ This is a full-stack todo application built using Flask (python) and MySQL RDBMS
 - User registration and authentication using JWT (JSON Web Token ).
 - Forms validation using <a href="https://formik.org/" target="_blank" >Formik</a> and <a href="https://www.npmjs.com/package/yup" target="_blank" >Yup</a> for seamless data entry.
 - Adding, viewing, modifying, and deleting tasks.
+- State management using Context API and Redux-toolkit 
 - Dark and light theme toggling.
 - Integration with backend API for task management.
 - Hide completed tasks to focus on what's important.
@@ -18,11 +19,11 @@ This is a full-stack todo application built using Flask (python) and MySQL RDBMS
 ## Technologies Used
 
 ### Frontend
-
-- **React**: JavaScript library for building user interfaces.
-- **React Router DOM**: DOM bindings for React Router, for routing in the application.
-- **Bootstrap**: Front-end framework for developing responsive and mobile-first websites.
-- **react-icons**: Library providing a collection of icons for React applications.
+- React.js
+- Redux-tookit
+- Bootstrap
+- CSS
+- Formik and Yup 
 
 ### Backend
 
