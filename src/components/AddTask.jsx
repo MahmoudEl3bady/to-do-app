@@ -8,6 +8,7 @@ const AddTask = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
    dispatch(handleAddTask(taskBody));
+   setTaskBody('');
   };
   return (
     <section className="add-task-section  d-flex flex-column gap-3 justify-content-center align-items-center p-4  mx-auto ">

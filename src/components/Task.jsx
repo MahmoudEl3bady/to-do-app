@@ -14,6 +14,10 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
     setIsActive(task.id);
   };
 
+ const handleModify = () => {
+   dispatch(handleModifyTask({ id: task.id, editedTask }));
+   setIsEditing(false);
+ };
   return (
     <>
       <section
@@ -52,7 +56,6 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
           </button>
         </div>
       </section>
-      {console.log(typeof task.id)}
       {isEditing && (
         <div className="d-flex gap-3">
           <input
@@ -65,9 +68,8 @@ const Task = ({ task, onDelete, onModify, onDone, isActive, setIsActive }) => {
           />
           <button
             className="btn  btn-light"
-            onClick={() =>
-              dispatch(handleModifyTask({ id: task.id, editedTask }))
-            }
+            type="submit"
+            onClick={handleModify}
           >
             Save
           </button>

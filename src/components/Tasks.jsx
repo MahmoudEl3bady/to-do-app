@@ -16,18 +16,6 @@ const Tasks = ({ onDone }) => {
   }, []);
   const userTasks = useSelector((state) => state.tasks);
   const [tasks, setTasks] = useState(userTasks);
-
-  // Edit Task
-  const handleModify = (nextTask) => {
-    setTasks(
-      tasks.map((t) => {
-        if (t.id === nextTask.id) {
-          return nextTask;
-        } else return t;
-      })
-    );
-  };
-
   return (
     <section className="d-flex flex-column gap-3 justify-content-center align-items-center  pb-5 tasks ">
       <div
@@ -51,7 +39,6 @@ const Tasks = ({ onDone }) => {
               key={task.id}
               task={task}
               onDelete={()=>dispatch(handleDeleteTask(task.id))}
-              onModify={()=>handleModifyTask(id,task,editedTask)}
               onDone={() => onDone(task)}
               isActive={task.id === isActive}
               setIsActive={setIsActive}

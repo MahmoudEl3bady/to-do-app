@@ -128,15 +128,16 @@ export const tasksSlice = createSlice({
        state.push(action.payload);
        return state;  
     })
-    builder.addCase(handleModifyTask.fulfilled , (state,action)=>{
-        state.map((t) => {
-          if (t.id === action.payload.id) {
-            return state;
-          } else {
-            return t;
-          }
-        });
-    })
+   builder.addCase(handleModifyTask.fulfilled, (state, action) => {
+     console.log("Modified Task Data:", action.payload); // Log the modified task data
+     const modifiedTask = action.payload;
+     const index = state.findIndex((task) => task.id === modifiedTask.id);
+     if (index !== -1) {
+       state[index] = modifiedTask;
+     }
+     return state;
+   });
+
   },
 });
 
