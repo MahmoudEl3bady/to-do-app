@@ -21,6 +21,7 @@ This is a full-stack todo application built using Flask (python) and MySQL RDBMS
 ### Frontend
 - React.js
 - Redux-tookit
+- React Router 
 - Bootstrap
 - CSS
 - Formik and Yup 
