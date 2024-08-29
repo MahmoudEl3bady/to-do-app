@@ -29,11 +29,3 @@ This is a full-stack todo application built using Flask (python) and MySQL RDBMS
 ### Backend
 - Flask
 - MYSQL
-
-
-
-7.**Start the react server :**
-
-```bash
-npm run dev
-```
